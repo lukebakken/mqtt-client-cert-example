@@ -16,15 +16,11 @@ client.on_subscribe = on_subscribe
 
 client.username_pw_set('guest', 'guest')
 
-tls_context = ssl.SSLContext()
+tls_context = ssl.SSLContext(protocol=ssl.PROTOCOL_TLS_CLIENT)
 
-ca_certfile = './certs_1/ca_certificate.pem'
-certfile = './certs_1/client_certificate.pem'
-keyfile = './certs_1/client_key.pem'
-
-# ca_certfile = './certs_2/ca_certificate.pem'
-# certfile = './certs_2/client_certificate.pem'
-# keyfile = './certs_2/client_key.pem'
+ca_certfile = './tls-gen/basic/result/ca_certificate.pem'
+certfile = './tls-gen/basic/result/client_certificate.pem'
+keyfile = './tls-gen/basic/result/client_key.pem'
 
 tls_context.load_verify_locations(cafile=ca_certfile)
 tls_context.load_cert_chain(certfile, keyfile)

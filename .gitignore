@@ -1,3 +1,6 @@
 venv/
 rabbitmq_server*/
-rabbitmq-server*.xz/
+
+erl_crash.dump
+rabbitmq-server*.xz
+rabbitmq.conf

@@ -1,0 +1,22 @@
+loopback_users = none
+
+log.file.level = debug
+
+ssl_options.certfile   = ##TLS_GEN_RESULT_DIR##/server_certificate.pem
+ssl_options.keyfile    = ##TLS_GEN_RESULT_DIR##/server_key.pem
+ssl_options.cacertfile = ##TLS_GEN_RESULT_DIR##/ca_certificate.pem
+ssl_options.verify     = verify_peer
+ssl_options.fail_if_no_peer_cert  = true
+
+listeners.tcp.default = 5672
+listeners.ssl.default = 5671
+
+mqtt.listeners.tcp.default = 1883
+mqtt.listeners.ssl.default = 8883
+
+management.tcp.port = 15672
+management.ssl.port = 15671
+
+management.ssl.certfile   = ##TLS_GEN_RESULT_DIR##/server_certificate.pem
+management.ssl.keyfile    = ##TLS_GEN_RESULT_DIR##/server_key.pem
+management.ssl.cacertfile = ##TLS_GEN_RESULT_DIR##/ca_certificate.pem
