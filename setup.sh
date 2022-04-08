@@ -3,7 +3,7 @@
 set -o errexit
 set -o nounset
 set -o pipefail
-set -o xtrace
+# set -o xtrace
 
 # shellcheck disable=SC2155
 readonly script_dir="$(cd "$(dirname "$0")" && pwd)"
@@ -19,7 +19,7 @@ readonly rmq_ctl="$rmq_sbin_dir/rabbitmqctl"
 function on_exit
 {
     set +o errexit
-    "$rmq_ctl" shutdown
+    echo '[INFO] exiting!'
 }
 trap on_exit EXIT
 

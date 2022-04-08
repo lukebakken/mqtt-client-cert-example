@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -o nounset
-set -o xtrace
+# set -o xtrace
 
 # shellcheck disable=SC2155
 readonly script_dir="$(cd "$(dirname "$0")" && pwd)"
