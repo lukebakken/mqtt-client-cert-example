@@ -14,8 +14,6 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_subscribe = on_subscribe
 
-client.username_pw_set('guest', 'guest')
-
 tls_context = ssl.SSLContext(protocol=ssl.PROTOCOL_TLS_CLIENT)
 
 ca_certfile = './tls-gen/basic/result/ca_certificate.pem'

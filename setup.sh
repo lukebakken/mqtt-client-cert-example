@@ -8,7 +8,7 @@ set -o pipefail
 # shellcheck disable=SC2155
 readonly script_dir="$(cd "$(dirname "$0")" && pwd)"
 
-readonly rmq_version='3.9.14'
+readonly rmq_version='3.12.1'
 readonly rmq_xz="$script_dir/rabbitmq-server-generic-unix-$rmq_version.tar.xz"
 readonly rmq_dir="$script_dir/rabbitmq_server-$rmq_version"
 readonly rmq_etc_dir="$rmq_dir/etc/rabbitmq"
@@ -32,7 +32,7 @@ fi
 readonly rmq_plugins="$rmq_sbin_dir/rabbitmq-plugins"
 if [[ -x $rmq_plugins ]]
 then
-    "$rmq_plugins" enable rabbitmq_management rabbitmq_mqtt
+    "$rmq_plugins" enable rabbitmq_management rabbitmq_mqtt rabbitmq_auth_mechanism_ssl
 else
     echo "[ERROR] expected to find '$rmq_plugins', exiting" 1>&2
     exit 69
@@ -65,7 +65,11 @@ sed -e "s|##TLS_GEN_RESULT_DIR##|$tls_gen_result_dir|" "$script_dir/rabbitmq.con
 # Start RabbitMQ and wait
 "$rmq_server" -detached
 sleep 5
-"$rmq_ctl" await_startup
+readonly cn="$(openssl x509 -noout -subject -nameopt multiline -in tls-gen/basic/result/client_certificate.pem | awk '/commonName/ { print $3 }')"
+set +o errexit
+"$rmq_ctl" add_user "$cn" password_unused
+"$rmq_ctl" set_permissions "$cn" '.*' '.*' '.*'
+set -o errexit
 
 # Start Python program
 python "$script_dir/mqtt.py"
