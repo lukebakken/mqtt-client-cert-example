@@ -8,7 +8,7 @@ set -o pipefail
 # shellcheck disable=SC2155
 readonly script_dir="$(cd "$(dirname "$0")" && pwd)"
 
-readonly rmq_version='3.12.11'
+readonly rmq_version='3.13.0'
 readonly rmq_xz="$script_dir/rabbitmq-server-generic-unix-$rmq_version.tar.xz"
 readonly rmq_dir="$script_dir/rabbitmq_server-$rmq_version"
 readonly rmq_etc_dir="$rmq_dir/etc/rabbitmq"
