@@ -6,7 +6,7 @@ set -o nounset
 # shellcheck disable=SC2155
 readonly script_dir="$(cd "$(dirname "$0")" && pwd)"
 
-readonly rmq_version='3.12.1'
+readonly rmq_version='3.13.2'
 readonly rmq_xz="$script_dir/rabbitmq-server-generic-unix-$rmq_version.tar.xz"
 readonly rmq_dir="$script_dir/rabbitmq_server-$rmq_version"
 readonly venv_dir="$script_dir/venv"
