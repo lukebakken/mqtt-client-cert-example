@@ -38,9 +38,13 @@ New-Variable -Name rabbitmq_base -Option Constant -Value `
 
 New-Variable -Name rabbitmq_conf_in -Option Constant -Value `
 	(Join-Path -Path $curdir -ChildPath 'rabbitmq.conf.in')
-
 New-Variable -Name rabbitmq_conf_out -Option Constant -Value `
 	(Join-Path -Path $rabbitmq_base -ChildPath 'rabbitmq.conf')
+
+New-Variable -Name advanced_config_in -Option Constant -Value `
+	(Join-Path -Path $curdir -ChildPath 'advanced.config.in')
+New-Variable -Name advanced_config_out -Option Constant -Value `
+	(Join-Path -Path $rabbitmq_base -ChildPath 'advanced.config')
 
 New-Variable -Name enabled_plugins_file -Option Constant -Value `
 	(Join-Path -Path $curdir -ChildPath 'enabled_plugins')
@@ -81,11 +85,12 @@ if (!(Test-Path -LiteralPath $ca_certfile))
     }
 }
 
-(Get-Content -Raw -Path $rabbitmq_conf_in) `
-    -Replace '##TLS_GEN_RESULT_DIR##', $tls_gen_basic_result_dir_slashes | Set-Content -Path $rabbitmq_conf_out
+(Get-Content -Raw -Path $advanced_config_in) `
+    -Replace '##TLS_GEN_RESULT_DIR##', $tls_gen_basic_result_dir_slashes | Set-Content -Path $advanced_config_out
 
 Copy-Item -Verbose -Force -LiteralPath $enabled_plugins_file -Destination $enabled_plugins_file_out
 
+$env:LOG = 'debug'
 $env:RABBITMQ_ALLOW_INPUT = 'true'
 $env:RABBITMQ_BASE = $rabbitmq_base
 & $rabbitmq_server_cmd

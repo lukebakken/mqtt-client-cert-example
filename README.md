@@ -1,41 +1,37 @@
-# Environment setup
 
-RabbitMQ 3.12.1, Erlang 26.0.2 on Arch Linux
+# Start RabbitMQ
 
-Run `setup.sh`, which will download RabbitMQ, set up configuration, set up certificates, set up Python, and start the test application.
-
-You can locate and inspect the generated configuration file like this:
+NOTE: this will also create certs using the `COMPUTERNAME` env variable for `CN=`
 
 ```
-lbakken@shostakovich ~/development/lukebakken/mqtt-client-cert-example (main *=)
-$ cat rabbitmq_server-3.12.1/etc/rabbitmq/rabbitmq.conf
-loopback_users = none
+.\setup.ps1
+```
 
-log.file.level = debug
+# Add user
 
-auth_mechanisms.1 = EXTERNAL
-auth_mechanisms.2 = PLAIN
-auth_mechanisms.3 = AMQPLAIN
+```
+.\add-user.ps1
+```
 
-ssl_options.certfile   = /home/lbakken/development/lukebakken/mqtt-client-cert-example/tls-gen/basic/result/server_certificate.pem
-ssl_options.keyfile    = /home/lbakken/development/lukebakken/mqtt-client-cert-example/tls-gen/basic/result/server_key.pem
-ssl_options.cacertfile = /home/lbakken/development/lukebakken/mqtt-client-cert-example/tls-gen/basic/result/ca_certificate.pem
-ssl_options.verify     = verify_peer
-ssl_options.fail_if_no_peer_cert  = true
-ssl_cert_login_from = common_name
+# Run MQTT mqtt client
 
-listeners.tcp.default = 5672
-listeners.ssl.default = 5671
+NOTE: client authenticates using X509 client cert
 
-mqtt.listeners.tcp.default = 1883
-mqtt.listeners.ssl.default = 8883
-mqtt.ssl_cert_login = true
-mqtt.allow_anonymous = true
+```
+pipenv install
+pipenv run mqtt
+```
 
-management.tcp.port = 15672
-management.ssl.port = 15671
+# Encrypting value
 
-management.ssl.certfile   = /home/lbakken/development/lukebakken/mqtt-client-cert-example/tls-gen/basic/result/server_certificate.pem
-management.ssl.keyfile    = /home/lbakken/development/lukebakken/mqtt-client-cert-example/tls-gen/basic/result/server_key.pem
-management.ssl.cacertfile = /home/lbakken/development/lukebakken/mqtt-client-cert-example/tls-gen/basic/result/ca_certificate.pem
+NOTE: this is using `cmd.exe`:
+
+```
+C:\Users\lbakken\development\lukebakken\mqtt-client-cert-example>.\rabbitmq_server-3.13.2\sbin\rabbitmqctl.bat encode --cipher aes_256_cbc --hash sha512 --iterations 1000 """grapefruit""" rabbitmq-server-11347
+Encrypting value ...
+{encrypted,<<"fHrsMqvZGNbxwujPMDTjwQ61Pu9weIZDgqnEyATvnZrNIEi5HmJSr4qCRGn7ljLI">>}
+
+C:\Users\lbakken\development\lukebakken\mqtt-client-cert-example>.\rabbitmq_server-3.13.2\sbin\rabbitmqctl.bat decode --cipher aes_256_cbc --hash sha512 --iterations 1000 "{encrypted,<<""fHrsMqvZGNbxwujPMDTjwQ61Pu9weIZDgqnEyATvnZrNIEi5HmJSr4qCRGn7ljLI"">>}" rabbitmq-server-11347
+Decrypting value...
+"grapefruit"
 ```

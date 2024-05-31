@@ -1,0 +1,38 @@
+[
+    {rabbit, [
+        {tcp_listeners, [{'127.0.0.1', 5672}]},
+        {ssl_listeners, [5671]},
+        {auth_mechanisms, [
+            'EXTERNAL',
+            'PLAIN',
+            'AMQPLAIN'
+        ]},
+        {ssl_cert_login_from, common_name},
+        {ssl_options, [
+            {cacertfile, "##TLS_GEN_RESULT_DIR##/ca_certificate.pem"},
+            {certfile, "##TLS_GEN_RESULT_DIR##/server_certificate.pem"},
+            {keyfile, "##TLS_GEN_RESULT_DIR##/server_key.pem"},
+            {password, {encrypted,<<"fHrsMqvZGNbxwujPMDTjwQ61Pu9weIZDgqnEyATvnZrNIEi5HmJSr4qCRGn7ljLI">>}},
+            {verify, verify_peer},
+            {fail_if_no_peer_cert, true}
+        ]},
+        {config_entry_decoder, [
+            {passphrase, <<"rabbitmq-server-11347">>},
+            {cipher, aes_256_cbc},
+            {hash, sha512},
+            {iterations, 1000}
+        ]}
+    ]},
+    {rabbitmq_management, [
+        {listener, [
+            {port, 15672},
+            {ip, "127.0.0.1"}
+        ]}
+    ]},
+    {rabbitmq_mqtt, [
+        {allow_anonymous, true},
+        {ssl_cert_login, true},
+        {ssl_listeners, [8883]},
+        {tcp_listeners,[1883]}
+    ]}
+].
