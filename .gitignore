@@ -1,5 +1,6 @@
 venv/
 rabbitmq_server*/
+rmq/
 
 erl_crash.dump
 rabbitmq-server*.xz
